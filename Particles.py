@@ -32,7 +32,8 @@ class Sand(Particle):
     NAME = "Sand"
     
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((194, 178, 128), self.NAME, x, y,True,(GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+        super().__init__((194, 178, 128), self.NAME, x, y,True,
+                         (GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
 @add_to_particle_list
 class Stone(Particle):
     NAME = "Stone"

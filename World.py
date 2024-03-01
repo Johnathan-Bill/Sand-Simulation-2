@@ -24,8 +24,10 @@ class World:
         def Valid_Directions(self, particle : Particle) -> List[List[int]]:
                 valid = []
                 for d in particle.DIRECTIONS:  
-                        if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols and particle.x + d[0] >= 0 and particle.y + d[1] >0):
-                                if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].NAME == "Void" and self._GRID.space[particle.x+d[0]][particle.y].NAME == "Void"):
+                        if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols 
+                           and particle.x + d[0] >= 0 and particle.y + d[1] >0):
+                                if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].NAME == "Void" 
+                                   and self._GRID.space[particle.x+d[0]][particle.y].NAME == "Void"):
                                         valid.append(d)
                                 
                 return valid
