@@ -13,7 +13,7 @@ class World:
                 self.height = height
                 pass
             
-            
+         # using the x and y postions add the element to the partcles list and space list   
         def AddParticle(self, x:int , y:int, particle_type : type):
             if(self._GRID.space[x][y].NAME == "Void"):
                 new_particle : Particle = particle_type(x,y)
@@ -21,6 +21,7 @@ class World:
                 self.Particles.append(new_particle)
         pass
         
+        # given a particle check if its neighbors and corners to see if i can move
         def Valid_Directions(self, particle : Particle) -> List[List[int]]:
                 valid = []
                 for d in particle.DIRECTIONS:  
@@ -31,6 +32,7 @@ class World:
                                         valid.append(d)
                                 
                 return valid
+        #if the particle can fall and not at the bottom of the array and not above any particle that is void move it
         def PhysicsUpdate(self):
                 for particle in self.Particles:
                         if(not particle.canFall or particle.y+1 == self._GRID.cols) : continue
@@ -52,6 +54,7 @@ class World:
                         
                         
                 pass
+        # deletes particle at x and y
         def Delete_Particle(self, x : int, y : int):
                 
                 particle = self._GRID.space[x][y]

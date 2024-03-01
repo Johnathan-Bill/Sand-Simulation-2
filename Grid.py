@@ -13,7 +13,7 @@ class Grid:
         self.rows = m.floor(width)
         self.cols = m.floor(height)
         
-        self.space = [[ParticleTypes[0] for i in range(self.cols)] for j in range(self.rows)]
+        self.space = [[ParticleTypes[0](j,i) for i in range(self.cols)] for j in range(self.rows)]
         
     
         
