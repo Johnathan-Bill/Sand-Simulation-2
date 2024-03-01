@@ -11,6 +11,7 @@ Current_Selection : int = 1
 fpsClock = pygame.time.Clock()
 pygame.init()
 def main():
+    global Current_Selection
     pygame.display.set_caption('Sand Simulation  - JBill')
     global SCREEN
     SCREEN = pygame.display.set_mode(WINDOW_SIZE)
@@ -22,17 +23,34 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEWHEEL:
+                if event.y == 1:
+                    if(Current_Selection +1 == len(ParticleTypes)-1): Current_Selection = 1
+                    else: Current_Selection -=1
+                if event.y == -1:
+                    if(Current_Selection -1 == 0): Current_Selection = len(ParticleTypes)-1
+                    else: Current_Selection -=1
             if pygame.mouse.get_pressed()[0]:
-                Click_Event(mouse_postion)
+                Add_Event(mouse_postion)
+            if pygame.mouse.get_pressed()[2]:
+                Delete_Event(mouse_postion)
+                
+        WORLD.PhysicsUpdate()
         render()
+
         fpsClock.tick(FPS)
         
         
-def Click_Event(pos : Tuple[int,int]):
+def Add_Event(pos : Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
     WORLD.AddParticle(Math.floor(x),Math.floor(y),ParticleTypes[Current_Selection])
 
+def Delete_Event(pos: Tuple[int,int]):
+    x = Math.floor(pos[0])
+    y = Math.floor(pos[1])
+    WORLD.Delete_Particle(x,y)
+    pass
 
 
 def clamp(n, smallest, largest) -> int:

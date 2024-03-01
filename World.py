@@ -25,13 +25,25 @@ class World:
             
             
         def AddParticle(self, x:int , y:int, particle_type : type):
-            if(self._GRID.Current_Grid[x][y].NAME == "Void"):
+            if(self._GRID.space[x][y].NAME == "Void"):
                 new_particle : Particle = particle_type(x,y)
-                self._GRID.Current_Grid[x][y] = new_particle
+                self._GRID.space[x][y] = new_particle
                 self.Particles.append(new_particle)
         pass
         
-        def PhysicsUpdate():
-            
-            
-            pass
+        def PhysicsUpdate(self):
+                for particle in self.Particles:
+                        if(not particle.canFall or particle.y+1 == self._GRID.cols or self._GRID.space[particle.x][particle.y+1].NAME != "Void") : continue
+                        particle.y += 1
+                        
+                        #replaces the partical current position to a void particle then sets the new postion with the .space
+                        self._GRID.space[particle.x][particle.y-1] = ParticleTypes[0](particle.x,particle.y-1)
+                        self._GRID.space[particle.x][particle.y] = particle
+                        
+                pass
+        def Delete_Particle(self, x : int, y : int):
+                
+                particle = self._GRID.space[x][y]
+                if(particle.NAME != "Void"):
+                        self.Particles.remove(particle)
+                        self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)

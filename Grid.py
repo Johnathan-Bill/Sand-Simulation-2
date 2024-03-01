@@ -6,15 +6,14 @@ class Grid:
     cols : int
  
     Previous_Grid : List[List[Particle | None]]
-    Current_Grid : List[List[Particle | None]]
+    space : List[List[Particle | None]]
     
     def __init__(self,height : int ,width : int) -> None:
         
         self.rows = m.floor(width)
         self.cols = m.floor(height)
         
-        self.Current_Grid = [[ParticleTypes[0] for i in range(self.cols)] for j in range(self.rows)]
-        self.Previous_Grid = [[ParticleTypes[0] for i in range(self.cols)] for j in range(self.rows)]
+        self.space = [[ParticleTypes[0] for i in range(self.cols)] for j in range(self.rows)]
         
     
         
