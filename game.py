@@ -25,10 +25,10 @@ def main():
                 running = False
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
-                    if(Current_Selection +1 == len(ParticleTypes)-1): Current_Selection = 1
-                    else: Current_Selection -=1
+                    if(Current_Selection == (len(ParticleTypes)-1)): Current_Selection = 1
+                    else: Current_Selection +=1
                 if event.y == -1:
-                    if(Current_Selection -1 == 0): Current_Selection = len(ParticleTypes)-1
+                    if(Current_Selection -1 <= 0): Current_Selection = len(ParticleTypes)-1
                     else: Current_Selection -=1
             if pygame.mouse.get_pressed()[0]:
                 Add_Event(mouse_postion)
