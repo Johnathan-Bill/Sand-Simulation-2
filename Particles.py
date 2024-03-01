@@ -8,13 +8,15 @@ class Particle:
     canFall : bool
     densisty : int
     updated : bool
+    canRise : bool
     DIRECTIONS: List[List[int]]
-    def __init__(self, color: Tuple, name : str, x : int, y : int, densisty : int = -1, canFall : bool = False, dir : List[List[int]] = []) -> None:
+    def __init__(self, color: Tuple, name : str, x : int, y : int, densisty : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False) -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
         self.y = y
         self.canFall = canFall
+        self.canRise = canRise
         self.DIRECTIONS = dir
         self.densisty = densisty
         self.updated = False
@@ -53,4 +55,16 @@ class Wood(Particle):
 class Water(Particle):
     NAME = "Water"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((28,163,236), self.NAME, x, y,2,True)
+        super().__init__((28,163,236), self.NAME, x, y,2,True,
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+@add_to_particle_list
+class Smoke(Particle):
+    NAME = "Smoke"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((115, 130, 118), self.NAME, x, y,3, canFall= False,canRise = True, 
+                         dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
+@add_to_particle_list
+class Smoke(Particle):
+    NAME = "Steam"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((163, 221, 248), self.NAME, x, y,3, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))

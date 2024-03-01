@@ -42,6 +42,8 @@ def main():
                 Add_Event(mouse_postion)
             if pygame.mouse.get_pressed()[2]:
                 Delete_Event(mouse_postion)
+            if(pygame.mouse.get_pressed()[1]):
+                Inspect(mouse_postion)
                 
         WORLD.PhysicsUpdate()
         render()
@@ -59,7 +61,8 @@ def Delete_Event(pos: Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
     WORLD.Delete_Particle(x,y)
-
+def Inspect(pos : Tuple[int,int]):
+    pass
 # returns the middle value
 def clamp(n, smallest, largest) -> int:
     ll: List[int] = [smallest, n, largest]
