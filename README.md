@@ -45,9 +45,7 @@
 - For a more detailed list of known issues, please refer to the [issues](https://github.com/username/SandSimulation2/issues) section.
 
 ## Future Plans
-We are actively working on addressing the current issues and implementing new features. Feel free to contribute by submitting bug reports, feature requests, or code contributions.
+I am actively working on addressing the current issues and implementing new features. Feel free to contribute by submitting bug reports, feature requests, or code contributions.
 
-## License
-This project is licensed under the [MIT License](LICENSE.md).
 
 **Note:** Please be aware that this project is a work in progress, and contributions are welcome. Keep an eye on updates for improvements and new features.
