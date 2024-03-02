@@ -82,18 +82,18 @@ def get_mouse_world_position() -> Tuple[int, int]:
 def render():
     # sets the window caption
     pygame.display.set_caption(f'Sand Simulator | FPS: {int(fpsClock.get_fps())}')
-    #sets the surface
+
     surface = pygame.Surface((WORLD.width, WORLD.height))
-    
-    #for each particle draw it on the surface as a pixel
+    particle_text = pygame.font.SysFont("times new roman", 15).render(
+        f'Selected Particle: {ParticleTypes[Current_Selection].NAME}', False, (255, 255, 255)
+    )
+
     for particle in WORLD.Particles:
-        surface.set_at((particle.x,particle.y),particle.COLOR)
-    
-    #scales the surface so the pixels are n * normal size where n is PIXEL_SIZE
+        surface.set_at((particle.x, particle.y), particle.COLOR)
+
     scaled_surface = pygame.transform.scale(surface, SCREEN.get_size())
-    
-    #applies it to the screen and updates the render
-    SCREEN.blit(scaled_surface,(0,0))
+    scaled_surface.blit(particle_text, (5, 5))
+    SCREEN.blit(scaled_surface, (0, 0))
     pygame.display.flip()
     
 main()

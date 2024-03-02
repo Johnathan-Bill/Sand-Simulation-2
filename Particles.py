@@ -6,11 +6,11 @@ class Particle:
     x : int
     y : int
     canFall : bool
-    densisty : int
+    density : int
     updated : bool
     canRise : bool
     DIRECTIONS: List[List[int]]
-    def __init__(self, color: Tuple, name : str, x : int, y : int, densisty : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False) -> None:
+    def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False) -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -18,7 +18,7 @@ class Particle:
         self.canFall = canFall
         self.canRise = canRise
         self.DIRECTIONS = dir
-        self.densisty = densisty
+        self.density = density
         self.updated = False
 
     

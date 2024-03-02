@@ -27,15 +27,15 @@ class World:
                 # for d in particle.DIRECTIONS:  
                 #         if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols 
                 #            and particle.x + d[0] >= 0 and particle.y + d[1] >0):
-                #                 if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].densisty < particle.densisty 
+                #                 if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].density < particle.density 
                 #                    and self._GRID.space[particle.x+d[0]][particle.y].NAME == "Void"):
                 #                         valid.append(d)
                 
                 for d in particle.DIRECTIONS:
                         if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols 
                             and particle.x + d[0] >= 0 and particle.y + d[1] >=0):
-                                if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].densisty < particle.densisty
-                                        and self._GRID.space[particle.x+d[0]][particle.y].densisty < particle.densisty):
+                                if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].density < particle.density
+                                        and self._GRID.space[particle.x+d[0]][particle.y].density < particle.density):
                                         valid.append(d)
                         pass
                 
@@ -55,7 +55,7 @@ class World:
                                 self._GRID.space[particle.x - r[0]][particle.y - r[1]] = ParticleTypes[0](particle.x - r[0],particle.y-r[1])
                                 self._GRID.space[particle.x ][particle.y] = particle
                                 continue
-                        if(self._GRID.space[particle.x][particle.y+1].densisty < particle.densisty and self._GRID.space[particle.x][particle.y+1].NAME != "Void" and particle.canFall):
+                        if(self._GRID.space[particle.x][particle.y+1].density < particle.density and self._GRID.space[particle.x][particle.y+1].NAME != "Void" and particle.canFall):
                                 self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y+1])
                         elif(self._GRID.space[particle.x][particle.y+1].NAME != "Void" and particle.canFall):
                                 d = self.Valid_Directions(particle)
@@ -115,11 +115,13 @@ class World:
                 pass
         def Can_Push_Up(self, x,y) -> bool:
                 for i in range(y,1,-1):
-                        if(self._GRID.space[x][i].densisty > self._GRID.space[x][y].densisty):
+                        if(self._GRID.space[x][i].density > self._GRID.space[x][y].density):
                                 return False
-
-                if(self._GRID.space[x][0].NAME != "Void"):
-                        return False
+                        if(self._GRID.space[x][i].NAME == "Void"):
+                                return True
+                # if(self._GRID.space[x][0].NAME != "Void"):
+                #         return False
+                
                 
                 return True
         def Push_Up(self,particle:Particle,r):
@@ -127,11 +129,13 @@ class World:
                 for i in range(particle.y,1,-1):
                         if(self._GRID.space[particle.x+r[0]][i].NAME != "Void"):
                                 first_non_void = i
-                i = first_non_void           
+                                break;
+                i = first_non_void          
                 while(i < particle.y+r[1]):
                         particle2 =  self._GRID.space[particle.x][i]
                         particle2.y -=1
                         self._GRID.space[particle2.x][particle2.y] = particle2
-                        
+                        if(particle.NAME == "Stone"):
+                                print("wtf")
                         
                         i +=1
