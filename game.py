@@ -55,12 +55,12 @@ def main():
 def Add_Event(pos : Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
-    WORLD.AddParticle(Math.floor(x),Math.floor(y),ParticleTypes[Current_Selection])
+    WORLD.add_particle(Math.floor(x),Math.floor(y),ParticleTypes[Current_Selection])
     #removes the corresponding mouse postion particle from the world
 def Delete_Event(pos: Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
-    WORLD.Delete_Particle(x,y)
+    WORLD.delete_particle(x,y)
 def Inspect(pos : Tuple[int,int]):
     pass
 # returns the middle value

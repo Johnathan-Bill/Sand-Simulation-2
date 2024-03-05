@@ -67,7 +67,7 @@ class Oil(Particle):
 class Smoke(Particle):
     NAME = "Smoke"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((115, 130, 118), self.NAME, x, y,3, canFall= False,canRise = True, 
+        super().__init__((115, 130, 118), self.NAME, x, y,2, canFall= False,canRise = True, 
                          dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
 @add_to_particle_list
 class Smoke(Particle):

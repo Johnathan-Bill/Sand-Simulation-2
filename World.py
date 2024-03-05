@@ -14,14 +14,14 @@ class World:
                 pass
             
          # using the x and y postions add the element to the partcles list and space list   
-        def AddParticle(self, x:int , y:int, particle_type : type):
+        def add_particle(self, x:int , y:int, particle_type : type):
             if(self._GRID.space[x][y].NAME == "Void"):
                 new_particle : Particle = particle_type(x,y)
                 self._GRID.space[x][y] = new_particle
                 self.Particles.append(new_particle)
         
         # deletes particle at x and y
-        def Delete_Particle(self, x : int, y : int):
+        def delete_particle(self, x : int, y : int):
                 
                 particle = self._GRID.space[x][y]
                 if(particle.NAME != "Void"):
@@ -39,7 +39,12 @@ class World:
                                         pass
                                 pass
                         elif particle.canRise:
-                                pass
+                                if self.particle_can_move_directly_up(particle):
+                                        self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y-1])
+                                else:
+                                        self.particle_try_move(particle)
+
+
                         
                         
                         # unmoving particle
@@ -84,6 +89,12 @@ class World:
         def particle_can_move_directly_down(self,particle : Particle) -> bool:
                 if(particle.y < self._GRID.cols-1 and 
                    (self._GRID.space[particle.x][particle.y+1].NAME == "Void" or self._GRID.space[particle.x][particle.y+1].density < particle.density)):
+                        return True
+                
+                return False
+        def particle_can_move_directly_up(self,particle : Particle) -> bool:
+                if(particle.y >0 and 
+                   (self._GRID.space[particle.x][particle.y-1].NAME == "Void" or self._GRID.space[particle.x][particle.y-1].density < particle.density)):
                         return True
                 
                 return False
