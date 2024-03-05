@@ -11,11 +11,14 @@ I always found physics in video games interesting especially in games like <a hr
 ## Future Additions
 - Fire
 - Heat
-- Moss
+- Mossisfication speed
 ## Current Issues
 - Optimization Issues
     - The (without altering settings) simulation handles upto physics particles (non-void particles) 14400 (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
 ## Recent Changes
+- Added Hud
+- Added Particle Inspection
+- Added Moss
 - Updated entire physics engine so it is more optimal
     - Update fixed overlapping issue, pushing issues, and non existent particles issue
 - added oil to simulate liquid densities (Water will follow the same rules in oil as sand does in water)
