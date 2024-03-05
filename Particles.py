@@ -7,21 +7,23 @@ class Particle:
     y : int
     canFall : bool
     density : int
-    updated : bool
+    last_update : int
     canRise : bool
+    canMultiply : bool
     DIRECTIONS: List[List[int]]
-    def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False) -> None:
+    def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False, canMultiply : bool = False) -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
         self.y = y
         self.canFall = canFall
         self.canRise = canRise
+        self.canMultiply = canMultiply
         self.DIRECTIONS = dir
         self.density = density
-        self.updated = False
+        self.last_update = 0
 
-    
+CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 ParticleTypes: List[Type[Particle]] = []
 def add_to_particle_list(particle : Type[Particle]) -> Type[Particle]:
     ParticleTypes.append(particle)
@@ -80,3 +82,9 @@ class Gas(Particle):
     NAME = "Gas"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((131, 143, 51), self.NAME, x, y,4, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
+
+@add_to_particle_list
+class Moss(Particle):
+    NAME = "Moss"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((131, 143, 51), self.NAME, x, y,999,canMultiply=True)

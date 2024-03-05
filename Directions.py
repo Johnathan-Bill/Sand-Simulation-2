@@ -1,6 +1,5 @@
 GLOBAL_DIRECTIONS = {
                 "Left":(-1,0),
-                "Still" :(0,0),
                 "Right":(1,0),
                 "Up_Left":(1,-1),
                 "Up":(0,-1),
