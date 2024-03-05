@@ -63,19 +63,19 @@ class World:
                         else:
                                 continue
         def multiply_particle(self,particle : Particle):
-                neighbors = self.get_all_neighbors(particle)
-                
-                for n in neighbors:
-                        self.replace_with_moss(n)
-                        pass
-                
-                pass
-        def get_all_neighbors(self,particle : Particle) -> List[Particle]:
+                match particle.NAME:
+                        case "Moss":
+                                neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_MOSS)
+                                for n in neighbors:
+                                        self.replace_with_moss(n)
+                        case _:
+                                pass
+        def get_all_neighbors(self,particle : Particle, interaction_array) -> List[Particle]:
                 neighbors = []
                 for direction in Directions.GLOBAL_DIRECTIONS.values():
                      if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
                            and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
-                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in CONSUMABLE_BY_MOSS): # check if it can be consumed
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interaction_array): # check if it can be consumed
                              neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
         def replace_with_moss(self, particle : Particle):

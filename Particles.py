@@ -87,4 +87,4 @@ class Gas(Particle):
 class Moss(Particle):
     NAME = "Moss"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((131, 143, 51), self.NAME, x, y,999,canMultiply=True)
+        super().__init__((56,118,29), self.NAME, x, y,999,canMultiply=True)
