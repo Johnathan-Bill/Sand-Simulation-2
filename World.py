@@ -36,8 +36,8 @@ class World:
                                         self.swap_particles(particle,self._GRID.space[particle.x][particle.y+1])
                                 else:
                                         self.particle_try_move(particle)
-                                        pass
-                                pass
+                                        
+                                
                         elif particle.canRise:
                                 if self.particle_can_move_directly_up(particle):
                                         self.swap_particles(particle,self._GRID.space[particle.x][particle.y-1])
@@ -111,7 +111,6 @@ class World:
                 particle1.y = newY
                 
                 
-                pass
         def particle_move(self, particle : Particle, newX : int, newY :int):
                 self._GRID.space[newX][newY] = particle
                 self._GRID.space[particle.x][particle.y] = ParticleTypes[0](particle.x,particle.y)
