@@ -6,13 +6,13 @@ from Particles import ParticleTypes
 WINDOW_SIZE = (1280,720)
 PIXEL_SIZE = 8
 FPS = 60
-WORLD = World(WINDOW_SIZE[1]/PIXEL_SIZE,WINDOW_SIZE[0]/PIXEL_SIZE)
-Current_Selection : int = 1
-fpsClock = pygame.time.Clock()
+world = World(WINDOW_SIZE[1]/PIXEL_SIZE,WINDOW_SIZE[0]/PIXEL_SIZE)
+current_selection : int = 1
+fps_clock = pygame.time.Clock()
 pygame.init()
 def main():
     # sets base screen
-    global Current_Selection
+    global current_selection
     pygame.display.set_caption('Sand Simulation  - JBill')
     global SCREEN
     SCREEN = pygame.display.set_mode(WINDOW_SIZE)
@@ -31,12 +31,12 @@ def main():
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
                     #if the current selection is the final element in the array reset to sand
-                    if(Current_Selection == (len(ParticleTypes)-1)): Current_Selection = 1
-                    else: Current_Selection +=1
+                    if(current_selection == (len(ParticleTypes)-1)): current_selection = 1
+                    else: current_selection +=1
                 if event.y == -1:
                     #if the current selection is sand set to the final element in the array
-                    if(Current_Selection -1 <= 0): Current_Selection = len(ParticleTypes)-1
-                    else: Current_Selection -=1
+                    if(current_selection -1 <= 0): current_selection = len(ParticleTypes)-1
+                    else: current_selection -=1
             # checks for left mouse click and right mouse click respectively
             if pygame.mouse.get_pressed()[0]:
                 Add_Event(mouse_postion)
@@ -45,22 +45,22 @@ def main():
             if(pygame.mouse.get_pressed()[1]):
                 Inspect(mouse_postion)
                 
-        WORLD.PhysicsUpdate()
+        world.PhysicsUpdate()
         render()
 
-        fpsClock.tick(FPS)
+        fps_clock.tick(FPS)
         
     # gets the position of the world mouse and finds it corresponding array point and adds the current selected
     #particle to the world
 def Add_Event(pos : Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
-    WORLD.add_particle(Math.floor(x),Math.floor(y),ParticleTypes[Current_Selection])
+    world.add_particle(Math.floor(x),Math.floor(y),ParticleTypes[current_selection])
     #removes the corresponding mouse postion particle from the world
 def Delete_Event(pos: Tuple[int,int]):
     x = Math.floor(pos[0])
     y = Math.floor(pos[1])
-    WORLD.delete_particle(x,y)
+    world.delete_particle(x,y)
 def Inspect(pos : Tuple[int,int]):
     pass
 # returns the middle value
@@ -74,21 +74,21 @@ def get_mouse_world_position() -> Tuple[int, int]:
     window_size = SCREEN.get_size()
     mouse_pos = pygame.mouse.get_pos()
     # Calculate the normalized mouse position in the world for both x and y coordinates
-    mouse_x = clamp(int((mouse_pos[0] / window_size[0]) * WORLD.width), 0, WORLD.width - 1)
-    mouse_y = clamp(int((mouse_pos[1] / window_size[1]) * WORLD.height), 0, WORLD.height - 1)
+    mouse_x = clamp(int((mouse_pos[0] / window_size[0]) * world.width), 0, world.width - 1)
+    mouse_y = clamp(int((mouse_pos[1] / window_size[1]) * world.height), 0, world.height - 1)
     return mouse_x, mouse_y
 
 
 def render():
     # sets the window caption
-    pygame.display.set_caption(f'Sand Simulator | FPS: {int(fpsClock.get_fps())}')
+    pygame.display.set_caption(f'Sand Simulator | FPS: {int(fps_clock.get_fps())}')
 
-    surface = pygame.Surface((WORLD.width, WORLD.height))
+    surface = pygame.Surface((world.width, world.height))
     particle_text = pygame.font.SysFont("times new roman", 15).render(
-        f'Selected Particle: {ParticleTypes[Current_Selection].NAME}', False, (255, 255, 255)
+        f'Selected Particle: {ParticleTypes[current_selection].NAME}', False, (255, 255, 255)
     )
 
-    for particle in WORLD.Particles:
+    for particle in world.Particles:
         surface.set_at((particle.x, particle.y), particle.COLOR)
 
     scaled_surface = pygame.transform.scale(surface, SCREEN.get_size())

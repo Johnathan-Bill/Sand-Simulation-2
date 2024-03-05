@@ -33,14 +33,14 @@ class World:
                 for particle in self.Particles:
                         if particle.canFall:
                                 if self.particle_can_move_directly_down(particle):
-                                        self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y+1])
+                                        self.swap_particles(particle,self._GRID.space[particle.x][particle.y+1])
                                 else:
                                         self.particle_try_move(particle)
                                         pass
                                 pass
                         elif particle.canRise:
                                 if self.particle_can_move_directly_up(particle):
-                                        self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y-1])
+                                        self.swap_particles(particle,self._GRID.space[particle.x][particle.y-1])
                                 else:
                                         self.particle_try_move(particle)
 
@@ -57,13 +57,13 @@ class World:
                 
                 if(len(neighbors) >= 1):
                         randNeighbor = choice(neighbors)
-                        self.Swap_Particles(particle,randNeighbor)
+                        self.swap_particles(particle,randNeighbor)
                         return
                 
                 neighbors = self.get_neighbors(particle)
                 if(len(neighbors) >= 1):
                         randNeighbor = choice(neighbors)
-                        self.Swap_Particles(particle,randNeighbor)
+                        self.swap_particles(particle,randNeighbor)
                         return
                 
                 
@@ -100,7 +100,7 @@ class World:
                 return False
         
         
-        def Swap_Particles(self, particle1: Particle, particle2 : Particle):
+        def swap_particles(self, particle1: Particle, particle2 : Particle):
                 newX = particle2.x
                 newY = particle2.y
                 self._GRID.space[newX][newY] = particle1
