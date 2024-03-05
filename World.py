@@ -19,86 +19,7 @@ class World:
                 new_particle : Particle = particle_type(x,y)
                 self._GRID.space[x][y] = new_particle
                 self.Particles.append(new_particle)
-        pass
         
-        # given a particle check if its neighbors and corners to see if i can move
-        def Valid_Directions(self, particle : Particle) -> List[List[int]]:
-                valid = []
-                # for d in particle.DIRECTIONS:  
-                #         if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols 
-                #            and particle.x + d[0] >= 0 and particle.y + d[1] >0):
-                #                 if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].density < particle.density 
-                #                    and self._GRID.space[particle.x+d[0]][particle.y].NAME == "Void"):
-                #                         valid.append(d)
-                
-                for d in particle.DIRECTIONS:
-                        if(particle.x + d[0] < self._GRID.rows and particle.y + d[1] < self._GRID.cols 
-                            and particle.x + d[0] >= 0 and particle.y + d[1] >=0):
-                                if(self._GRID.space[particle.x+d[0]][particle.y+d[1]].density < particle.density
-                                        and self._GRID.space[particle.x+d[0]][particle.y].density < particle.density):
-                                        valid.append(d)
-                        pass
-                
-                return valid
-        #if the particle can fall and not at the bottom of the array and not above any particle that is void move it
-        def PhysicsUpdate(self):
-                for particle in self.Particles:
-                        if((not particle.canFall and not particle.canRise) or particle.updated) : 
-                                particle.updated = False
-                                continue
-                        elif(particle.y+1 == self._GRID.cols or particle.y-1 < 0 and (particle.canFall or particle.canRise)):
-                                d = self.Valid_Directions(particle)
-                                if(len(d) < 1) : continue
-                                r = choice(d)
-                                particle.x += r[0]
-                                particle.y += r[1]
-                                self._GRID.space[particle.x - r[0]][particle.y - r[1]] = ParticleTypes[0](particle.x - r[0],particle.y-r[1])
-                                self._GRID.space[particle.x ][particle.y] = particle
-                                continue
-                        if(self._GRID.space[particle.x][particle.y+1].density < particle.density and self._GRID.space[particle.x][particle.y+1].NAME != "Void" and particle.canFall):
-                                self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y+1])
-                        elif(self._GRID.space[particle.x][particle.y+1].NAME != "Void" and particle.canFall):
-                                d = self.Valid_Directions(particle)
-                                if(len(d) < 1) : continue
-                                r = choice(d)
-                                
-                                if(self._GRID.space[particle.x + r[0]][particle.y + r[1]].NAME != "Void"):
-                                        if(self.Can_Push_Up(particle.x + r[0],particle.y + r[1])):          
-                                                particle.x += r[0]
-                                                particle.y += r[1]
-                                                self.Push_Up(particle,r)
-                                                self._GRID.space[particle.x - r[0]][particle.y - r[1]] = ParticleTypes[0](particle.x - r[0],particle.y-r[1])
-                                                self._GRID.space[particle.x ][particle.y] = particle
-                                        pass
-                                else:
-                                        particle.x += r[0]
-                                        particle.y += r[1]
-                                        self._GRID.space[particle.x - r[0]][particle.y - r[1]] = ParticleTypes[0](particle.x - r[0],particle.y-r[1])
-                                        self._GRID.space[particle.x ][particle.y] = particle
-                                
-                        elif(self._GRID.space[particle.x][particle.y+1].NAME == "Void" and particle.canFall):
-                                particle.y += 1
-                        # print(d)
-                        #replaces the partical current position to a void particle then sets the new postion with the .space
-                                self._GRID.space[particle.x][particle.y-1] = ParticleTypes[0](particle.x,particle.y-1)
-                                self._GRID.space[particle.x][particle.y] = particle
-                        elif(self._GRID.space[particle.x][particle.y-1].NAME != "Void" and particle.canRise):
-                                d = self.Valid_Directions(particle)
-                                if(len(d) < 1) : continue
-                                r = choice(d)
-                                
-                                particle.x += r[0]
-                                particle.y += r[1]
-                                self._GRID.space[particle.x - r[0]][particle.y - r[1]] = ParticleTypes[0](particle.x - r[0],particle.y-r[1])
-                                self._GRID.space[particle.x ][particle.y] = particle
-                                pass
-                        elif(self._GRID.space[particle.x][particle.y-1].NAME == "Void" and particle.canRise):
-                                particle.y -= 1
-                                self._GRID.space[particle.x][particle.y+1] = ParticleTypes[0](particle.x,particle.y+1)
-                                self._GRID.space[particle.x][particle.y] = particle
-                        
-                        
-                pass
         # deletes particle at x and y
         def Delete_Particle(self, x : int, y : int):
                 
@@ -106,36 +27,81 @@ class World:
                 if(particle.NAME != "Void"):
                         self.Particles.remove(particle)
                         self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
-        def Swap_Particles(self, particle1: Particle, particle2 : Particle):
-                self._GRID.space[particle1.x][particle1.y+1] = particle1
-                self._GRID.space[particle1.x][particle1.y] = particle2
-                particle2.updated = True
-                particle1.y +=1
-                particle2.y -=1
-                pass
-        def Can_Push_Up(self, x,y) -> bool:
-                for i in range(y,1,-1):
-                        if(self._GRID.space[x][i].density > self._GRID.space[x][y].density):
-                                return False
-                        if(self._GRID.space[x][i].NAME == "Void"):
-                                return True
-                # if(self._GRID.space[x][0].NAME != "Void"):
-                #         return False
-                
-                
-                return True
-        def Push_Up(self,particle:Particle,r):
-                first_non_void = -1
-                for i in range(particle.y,1,-1):
-                        if(self._GRID.space[particle.x+r[0]][i].NAME != "Void"):
-                                first_non_void = i
-                                break;
-                i = first_non_void          
-                while(i < particle.y+r[1]):
-                        particle2 =  self._GRID.space[particle.x][i]
-                        particle2.y -=1
-                        self._GRID.space[particle2.x][particle2.y] = particle2
-                        if(particle.NAME == "Stone"):
-                                print("wtf")
                         
-                        i +=1
+        def PhysicsUpdate(self):
+                
+                for particle in self.Particles:
+                        if particle.canFall:
+                                if self.particle_can_move_directly_down(particle):
+                                        self.Swap_Particles(particle,self._GRID.space[particle.x][particle.y+1])
+                                else:
+                                        self.particle_try_move(particle)
+                                        pass
+                                pass
+                        elif particle.canRise:
+                                pass
+                        
+                        
+                        # unmoving particle
+                        else:
+                                continue
+        
+        def particle_try_move(self,particle : Particle):
+                neighbors = self.get_void_neighbors(particle)
+                
+                
+                if(len(neighbors) >= 1):
+                        randNeighbor = choice(neighbors)
+                        self.Swap_Particles(particle,randNeighbor)
+                        return
+                
+                neighbors = self.get_neighbors(particle)
+                if(len(neighbors) >= 1):
+                        randNeighbor = choice(neighbors)
+                        self.Swap_Particles(particle,randNeighbor)
+                        return
+                
+                
+                               
+        def get_neighbors(self, particle : Particle):
+                neighbors = []
+                for direction in particle.DIRECTIONS:
+                        if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
+                           and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density): #check if the density is lower
+                               neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
+                return neighbors
+        def get_void_neighbors(self, particle : Particle) -> List[Particle]:
+                neighbors = []
+                for direction in particle.DIRECTIONS:
+                        if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
+                           and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
+                           and self._GRID.space[particle.x + direction[0]][particle.y].NAME == "Void" #check if it can actually move to the left/right logically (needs empty space next to it)
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME =="Void"): # check if the neighbor is void
+                                neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]])
+                return neighbors
+        def particle_can_move_directly_down(self,particle : Particle) -> bool:
+                if(particle.y < self._GRID.cols-1 and 
+                   (self._GRID.space[particle.x][particle.y+1].NAME == "Void" or self._GRID.space[particle.x][particle.y+1].density < particle.density)):
+                        return True
+                
+                return False
+        
+        
+        def Swap_Particles(self, particle1: Particle, particle2 : Particle):
+                newX = particle2.x
+                newY = particle2.y
+                self._GRID.space[newX][newY] = particle1
+                self._GRID.space[particle1.x][particle1.y] = particle2
+                particle2.y = particle1.y
+                particle2.x = particle1.x
+                particle1.x = newX
+                particle1.y = newY
+                
+                
+                pass
+        def particle_move(self, particle : Particle, newX : int, newY :int):
+                self._GRID.space[newX][newY] = particle
+                self._GRID.space[particle.x][particle.y] = ParticleTypes[0](particle.x,particle.y)
+                particle.x = particle.x + (newX - particle.x)
+                particle.y = particle.y + (newY - particle.y)
