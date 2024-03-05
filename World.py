@@ -68,7 +68,8 @@ class World:
                 for direction in particle.DIRECTIONS:
                         if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
                            and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
-                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density): #check if the density is lower
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density #check if the density is lower
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME !="Void"): 
                                neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
         def get_void_neighbors(self, particle : Particle) -> List[Particle]:

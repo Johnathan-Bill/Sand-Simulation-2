@@ -38,24 +38,30 @@ class Sand(Particle):
     NAME = "Sand"
     
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((194, 178, 128), self.NAME, x, y,3,True,
+        super().__init__((194, 178, 128), self.NAME, x, y,7,True,
                          (GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
 @add_to_particle_list
 class Stone(Particle):
     NAME = "Stone"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((136, 140, 141), self.NAME, x, y,3)
+        super().__init__((136, 140, 141), self.NAME, x, y,999)
 @add_to_particle_list
 class Wood(Particle):
     NAME = "Wood"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((161, 102, 47), self.NAME, x, y,3)
+        super().__init__((161, 102, 47), self.NAME, x, y,999)
         
 @add_to_particle_list
 class Water(Particle):
     NAME = "Water"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((28,163,236), self.NAME, x, y,2,True,
+        super().__init__((28,163,236), self.NAME, x, y,5,True,
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+@add_to_particle_list
+class Oil(Particle):
+    NAME = "Oil"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((219,207,92), self.NAME, x, y,3,True,
                          (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
 @add_to_particle_list
 class Smoke(Particle):
