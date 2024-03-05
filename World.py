@@ -28,6 +28,9 @@ class World:
                         self.Particles.remove(particle)
                         self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
                         
+        def get_particle(self, x : int, y : int) -> Particle:
+                return self._GRID.space[x][y]
+                   
         def PhysicsUpdate(self):
                 
                 for particle in self.Particles:
@@ -116,3 +119,7 @@ class World:
                 self._GRID.space[particle.x][particle.y] = ParticleTypes[0](particle.x,particle.y)
                 particle.x = particle.x + (newX - particle.x)
                 particle.y = particle.y + (newY - particle.y)
+        
+        def reset(self):
+                self._GRID = Grid(self._GRID.cols,self._GRID.rows)
+                self.Particles = []
