@@ -19,7 +19,6 @@ I always found physics in video games interesting especially in games like <a hr
 - Optimization Issues
     - The (without altering settings) simulation handles upto physics particles (non-void particles) 14400 (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
 ## Recent Changes
-- Added
 - Water and Lava Interactions
 - Added Hud
 - Added Particle Inspection
