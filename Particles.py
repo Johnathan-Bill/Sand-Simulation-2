@@ -57,10 +57,22 @@ class Wood(Particle):
         super().__init__((161, 102, 47), self.NAME, x, y,999, change_rate=30)
         
 @add_to_particle_list
+class Obsidian(Particle):
+    NAME = "Obsidian"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((113,98,122), self.NAME, x, y,999, change_rate=30)
+        
+@add_to_particle_list
 class Water(Particle):
     NAME = "Water"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((28,163,236), self.NAME, x, y,5,True,
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+@add_to_particle_list
+class Lava(Particle):
+    NAME = "Lava"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((255,37,0), self.NAME, x, y,6,True,
                          (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
 @add_to_particle_list
 class Oil(Particle):

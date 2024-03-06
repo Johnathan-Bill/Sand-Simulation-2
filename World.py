@@ -83,8 +83,12 @@ class World:
                 return neighbors
         def replace_with_moss(self, particle : Particle):
                 temp_pointer = particle
-                
-                self._GRID.space[particle.x][particle.y] = ParticleTypes[9](particle.x,particle.y)
+                moss_index = -1
+                for t in range(len(ParticleTypes)):
+                        if ParticleTypes[t].NAME == "Moss":
+                                moss_index = t
+                                
+                self._GRID.space[particle.x][particle.y] = ParticleTypes[moss_index](particle.x,particle.y)
                 self._GRID.space[particle.x][particle.y].last_update = self.current_interation
                 self.Particles.remove(temp_pointer)
                 self.Particles.append(self._GRID.space[particle.x][particle.y])
