@@ -75,7 +75,7 @@ class Water(Particle):
 class Lava(Particle):
     NAME = "Lava"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((255,37,0), self.NAME, x, y,7,True,
+        super().__init__((255,37,0), self.NAME, x, y,4,True,
                          (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
                          special_interaction=True)
 @add_to_particle_list
