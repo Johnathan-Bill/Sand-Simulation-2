@@ -12,8 +12,9 @@ class Particle:
     canMultiply : bool
     DIRECTIONS: List[List[int]]
     change_rate : int
+    special_interaction : bool
     def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], 
-                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1) -> None:
+                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False) -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -25,8 +26,10 @@ class Particle:
         self.density = density
         self.last_update = 0
         self.change_rate = change_rate
+        self.special_interaction= special_interaction
 
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
+LAVA_INTERACTION = {"Water" : "Obsidian"}
 ParticleTypes: List[Type[Particle]] = []
 def add_to_particle_list(particle : Type[Particle]) -> Type[Particle]:
     ParticleTypes.append(particle)
@@ -72,8 +75,9 @@ class Water(Particle):
 class Lava(Particle):
     NAME = "Lava"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((255,37,0), self.NAME, x, y,6,True,
-                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+        super().__init__((255,37,0), self.NAME, x, y,7,True,
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
+                         special_interaction=True)
 @add_to_particle_list
 class Oil(Particle):
     NAME = "Oil"

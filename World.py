@@ -1,5 +1,5 @@
 from typing import List
-from Particles import ParticleTypes, Particle, CONSUMABLE_BY_MOSS
+from Particles import ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION
 from Grid import Grid
 from random import choice
 import Directions
@@ -41,6 +41,10 @@ class World:
                 for particle in self.Particles:
                         if(self.current_interation == particle.last_update): continue
                         
+                        if particle.special_interaction:
+                                self.particle_interaction(particle)
+                                if(not particle in self.Particles):
+                                        continue
                         
                         if particle.canFall:
                                 if self.particle_can_move_directly_down(particle):
@@ -62,6 +66,51 @@ class World:
                         # unmoving particle
                         else:
                                 continue
+        
+        def get_specific_neighbors(self, particle : Particle, interactions : dict):
+                neighbors = []
+                for direction in particle.DIRECTIONS:
+                        if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
+                           and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interactions.keys() ): 
+                               neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
+                return neighbors
+        
+        
+        def replace_particles(self,particle1 : Particle, particle2 : Particle, name1 : str, name2 : str, name3 : str, interactions):
+                temp_index1 = -1
+                temp_index2 = -1
+                for t in range(len(ParticleTypes)):
+                        if ParticleTypes[t].NAME == name3:
+                                temp_index1 = t
+                        if ParticleTypes[t].NAME in interactions.keys():
+                                for t2 in range(len(ParticleTypes)):
+                                        if ParticleTypes[t2].NAME == interactions[name2]:
+                                                temp_index2 = t2
+                
+                self._GRID.space[particle1.x][particle1.y] = ParticleTypes[temp_index1](particle1.x,particle1.y)
+                self._GRID.space[particle2.x][particle2.y] = ParticleTypes[temp_index2](particle2.x,particle2.y)
+                
+                self._GRID.space[particle1.x][particle1.y].last_update = self.current_interation
+                self._GRID.space[particle2.x][particle2.y].last_update = self.current_interation
+                
+                self.Particles.remove(particle1)
+                self.Particles.remove(particle2)
+                self.Particles.append(self._GRID.space[particle1.x][particle1.y])
+                self.Particles.append(self._GRID.space[particle2.x][particle2.y])
+               
+        def particle_interaction(self,particle : Particle):
+                neighbors = []
+                match particle.NAME:
+                        case "Lava":
+                                neighbors = self.get_specific_neighbors(particle,LAVA_INTERACTION)
+                                if len(neighbors) < 1:
+                                        return
+                                rand = choice(neighbors)
+                                self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Smoke" , LAVA_INTERACTION)
+                                pass
+                
+                pass
         def multiply_particle(self,particle : Particle):
                 match particle.NAME:
                         case "Moss":
