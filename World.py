@@ -67,7 +67,10 @@ class World:
                         case "Moss":
                                 neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_MOSS)
                                 for n in neighbors:
-                                        self.replace_with_moss(n)
+                                        if not n.change_rate >0:
+                                                self.replace_with_moss(n)
+                                        else:
+                                                n.change_rate -= 1
                         case _:
                                 pass
         def get_all_neighbors(self,particle : Particle, interaction_array) -> List[Particle]:
