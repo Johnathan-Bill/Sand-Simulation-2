@@ -11,7 +11,9 @@ class Particle:
     canRise : bool
     canMultiply : bool
     DIRECTIONS: List[List[int]]
-    def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], canRise: bool = False, canMultiply : bool = False) -> None:
+    change_rate : int
+    def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], 
+                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1) -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -22,6 +24,7 @@ class Particle:
         self.DIRECTIONS = dir
         self.density = density
         self.last_update = 0
+        self.change_rate = change_rate
 
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 ParticleTypes: List[Type[Particle]] = []
@@ -46,12 +49,12 @@ class Sand(Particle):
 class Stone(Particle):
     NAME = "Stone"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((136, 140, 141), self.NAME, x, y,999)
+        super().__init__((136, 140, 141), self.NAME, x, y,999, change_rate=45)
 @add_to_particle_list
 class Wood(Particle):
     NAME = "Wood"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((161, 102, 47), self.NAME, x, y,999)
+        super().__init__((161, 102, 47), self.NAME, x, y,999, change_rate=30)
         
 @add_to_particle_list
 class Water(Particle):
