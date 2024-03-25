@@ -12,12 +12,12 @@ I always found physics in video games interesting especially in games like <a hr
 - Fire
 - Heat
 - Steam, Smoke, Gas dissipation
-- Options screen fior pixel size and world size
+- Options screen for pixel size and world size
 - ability to hide controls from the right hand corner
 ## Current Issues
 - Code is getting difficult to manage need to refactor the code
 - Optimization Issues
-    - The (without altering settings) simulation handles upto physics particles (non-void particles) 14400 (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
+    - The (without altering settings) simulation handles upto  14400 (non-void particles) (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
 ## Recent Changes
 - Water and Lava Interactions
 - Added Hud
