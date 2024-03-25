@@ -10,12 +10,13 @@ world = World(WINDOW_SIZE[1]/PIXEL_SIZE,WINDOW_SIZE[0]/PIXEL_SIZE)
 current_selection : int = 1
 fps_clock = pygame.time.Clock()
 inspect = False
+pause = False
 pygame.init()
 def main():
     # sets base screen
     global current_selection
     pygame.display.set_caption('Sand Simulation  - JBill')
-    global SCREEN
+    global SCREEN,pause
     SCREEN = pygame.display.set_mode(WINDOW_SIZE)
     SCREEN.fill((0,0,0))
     #basic pygame loop
@@ -31,6 +32,8 @@ def main():
             if(event.type == pygame.KEYUP):
                 if(event.key == pygame.K_c):
                     world.reset()
+                elif(event.key == pygame.K_p):
+                    pause = not pause
                 # veiws mouse wheel changes
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
@@ -48,8 +51,8 @@ def main():
                 delete_particle_event(mouse_postion)
             if(pygame.mouse.get_pressed()[1]):
                 enable_inspect()
-                
-        world.PhysicsUpdate()
+        if(not pause):        
+            world.PhysicsUpdate()
         render()
 
         fps_clock.tick(FPS)
@@ -102,7 +105,8 @@ def get_opposite_side(mouse_postion) -> List[int]:
     
     
     
-    return x,y  
+    return x,y 
+
 def render():
     # sets the window caption
     pygame.display.set_caption(f'Sand Simulator | FPS: {int(fps_clock.get_fps())}')
@@ -113,9 +117,17 @@ def render():
     )
     inspect_text  = pygame.font.SysFont("times new roman", 15).render(
         f'Inspect: {"Enabled" if inspect else "Disabled"}', False, (255, 255, 255)
+        
+    )
+    pause_label  = pygame.font.SysFont("times new roman", 15).render(
+        f'{"Paused" if pause else ""}', False, (255, 255, 255)
+        
     )
     clear_text  = pygame.font.SysFont("times new roman", 15).render(
         f'Press C to clear the world', False, (255, 255, 255)
+    )
+    pause_text  = pygame.font.SysFont("times new roman", 15).render(
+        f'Press P to pause physics', False, (255, 255, 255)
     )
     left_click_text  = pygame.font.SysFont("times new roman", 15).render(
         f'Left Click to place particle', False, (255, 255, 255)
@@ -154,11 +166,13 @@ def render():
             
     scaled_surface.blit(particle_text, (5, 5))
     scaled_surface.blit(inspect_text, (5, 25))
+    scaled_surface.blit(pause_label, (5, 45))
     scaled_surface.blit(left_click_text, (WINDOW_SIZE[0] - left_click_text.get_width() - 10, 5))
     scaled_surface.blit(right_click_text, (WINDOW_SIZE[0] - right_click_text.get_width() - 10, 25))
     scaled_surface.blit(scroll_cycle_text, (WINDOW_SIZE[0] - scroll_cycle_text.get_width() - 10, 65))
     scaled_surface.blit(scroll_click_text, (WINDOW_SIZE[0] - scroll_click_text.get_width() - 10, 45))
     scaled_surface.blit(clear_text, (WINDOW_SIZE[0] - clear_text.get_width() - 10, 85))
+    scaled_surface.blit(pause_text, (WINDOW_SIZE[0] - pause_text.get_width() - 10, 105))
     SCREEN.blit(scaled_surface, (0, 0))
     pygame.display.flip()
 

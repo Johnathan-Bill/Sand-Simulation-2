@@ -96,6 +96,7 @@ class World:
                 
                 self.Particles.remove(particle1)
                 self.Particles.remove(particle2)
+                
                 self.Particles.append(self._GRID.space[particle1.x][particle1.y])
                 self.Particles.append(self._GRID.space[particle2.x][particle2.y])
                
@@ -204,7 +205,9 @@ class World:
                 particle1.x = newX
                 particle1.y = newY
                 particle1.last_update = self.current_interation
-                particle2.last_update = self.current_interation
+                
+                if(not particle2.canRise):
+                        particle2.last_update = self.current_interation
                 
         def particle_move(self, particle : Particle, newX : int, newY :int):
                 self._GRID.space[newX][newY] = particle
