@@ -115,6 +115,9 @@ def render():
     particle_text = pygame.font.SysFont("times new roman", 15).render(
         f'Selected Particle: {ParticleTypes[current_selection].NAME}', False, (255, 255, 255)
     )
+    particle_amt_text = pygame.font.SysFont("times new roman", 15).render(
+        f'Particles: {len (world.Particles)}', False, (255, 255, 255)
+    )
     inspect_text  = pygame.font.SysFont("times new roman", 15).render(
         f'Inspect: {"Enabled" if inspect else "Disabled"}', False, (255, 255, 255)
         
@@ -165,8 +168,9 @@ def render():
             
             
     scaled_surface.blit(particle_text, (5, 5))
-    scaled_surface.blit(inspect_text, (5, 25))
-    scaled_surface.blit(pause_label, (5, 45))
+    scaled_surface.blit(particle_amt_text, (5, 25))
+    scaled_surface.blit(inspect_text, (5, 45))
+    scaled_surface.blit(pause_label, (5, 65))
     scaled_surface.blit(left_click_text, (WINDOW_SIZE[0] - left_click_text.get_width() - 10, 5))
     scaled_surface.blit(right_click_text, (WINDOW_SIZE[0] - right_click_text.get_width() - 10, 25))
     scaled_surface.blit(scroll_cycle_text, (WINDOW_SIZE[0] - scroll_cycle_text.get_width() - 10, 65))
