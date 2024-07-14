@@ -2,6 +2,7 @@ from typing import List
 from Particles import  CONSUMABLE_BY_FIRE, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
 from Grid import Grid
 from random import choice
+import random
 import Directions
 class World:
         _GRID :Grid
@@ -146,8 +147,17 @@ class World:
                                         if not n.change_rate >0:
                                                 self.replace_with_moss(n)
                                         else:
+                                                print("HERE??")
                                                 n.change_rate -= 1
                         case "Fire":
+                                rand = random.random()
+                                neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
+                                smoke_index = -1
+                                if (neighbor != None and neighbor.NAME == "Void" and rand < .02):
+                                        for t in range(len(ParticleTypes)):
+                                                if ParticleTypes[t].NAME == "Smoke":
+                                                        smoke_index = t
+                                        self.add_particle(neighbor.x,neighbor.y,ParticleTypes[smoke_index])
                                 neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_FIRE)
                                 for n in neighbors:
                                         if not n.change_rate >0:
@@ -159,6 +169,7 @@ class World:
                                                 else: n.change_rate = 5
                                         else:
                                                 n.change_rate -= 1
+
                         case _:
                                 pass
         def get_all_neighbors(self,particle : Particle, interaction_array) -> List[Particle]:
@@ -198,11 +209,8 @@ class World:
                 self.Particles.append(self._GRID.space[particle.x][particle.y])
                 
                 neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
-                if (neighbor != None):
-                        for t in range(len(ParticleTypes)):
-                                if ParticleTypes[t].NAME == "Smoke":
-                                        replace_index = t
-                        self.add_particle(neighbor.x,neighbor.y,ParticleTypes[replace_index])
+                if (neighbor != None and neighbor.NAME == "Void"):
+                        self.add_particle(neighbor.x,neighbor.y,ParticleTypes[smoke_index])
                         
                 pass
         def dissipate_particle(self, particle : Particle):
