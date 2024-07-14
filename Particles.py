@@ -30,6 +30,7 @@ class Particle:
 
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 LAVA_INTERACTION = {"Water" : "Obsidian"}
+WATER_INTERACTION = {"Lava" : "Stone"}
 ParticleTypes: List[Type[Particle]] = []
 def add_to_particle_list(particle : Type[Particle]) -> Type[Particle]:
     ParticleTypes.append(particle)
@@ -70,7 +71,8 @@ class Water(Particle):
     NAME = "Water"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((28,163,236), self.NAME, x, y,5,True,
-                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
+                         special_interaction=True)
 @add_to_particle_list
 class Lava(Particle):
     NAME = "Lava"

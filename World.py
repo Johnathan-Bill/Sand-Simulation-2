@@ -1,5 +1,5 @@
 from typing import List
-from Particles import ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION
+from Particles import WATER_INTERACTION, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION
 from Grid import Grid
 from random import choice
 import Directions
@@ -109,6 +109,12 @@ class World:
                                         return
                                 rand = choice(neighbors)
                                 self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Smoke" , LAVA_INTERACTION)
+                        case "Water":
+                                neighbors = self.get_specific_neighbors(particle,WATER_INTERACTION)
+                                if len(neighbors) < 1:
+                                        return
+                                rand = choice(neighbors)
+                                self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Steam" , WATER_INTERACTION)
                                 pass
                 
                 pass
