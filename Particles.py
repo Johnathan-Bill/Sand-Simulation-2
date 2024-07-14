@@ -10,11 +10,12 @@ class Particle:
     last_update : int
     canRise : bool
     canMultiply : bool
+    canDissipate : bool
     DIRECTIONS: List[List[int]]
     change_rate : int
     special_interaction : bool
     def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], 
-                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False) -> None:
+                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False, canDissipate : bool = False)  -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -27,8 +28,9 @@ class Particle:
         self.last_update = 0
         self.change_rate = change_rate
         self.special_interaction= special_interaction
-
+        self.canDissipate = canDissipate
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
+CONSUMABLE_BY_FIRE= ["Moss","Wood"]
 LAVA_INTERACTION = {"Water" : "Obsidian"}
 WATER_INTERACTION = {"Lava" : "Stone"}
 ParticleTypes: List[Type[Particle]] = []
@@ -48,6 +50,13 @@ class Sand(Particle):
     
     def __init__(self, x: int, y: int) -> None:
         super().__init__((194, 178, 128), self.NAME, x, y,7,True,
+                         (GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+@add_to_particle_list
+class Ash(Particle):
+    NAME = "Ash"
+    
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((106,108,109), self.NAME, x, y,7,True,
                          (GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
 @add_to_particle_list
 class Stone(Particle):
@@ -108,4 +117,9 @@ class Gas(Particle):
 class Moss(Particle):
     NAME = "Moss"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((56,118,29), self.NAME, x, y,999,canMultiply=True)
+        super().__init__((56,118,29), self.NAME, x, y,999,canMultiply=True,change_rate=60)
+@add_to_particle_list
+class Fire(Particle):
+    NAME = "Fire"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((170, 66, 3), self.NAME, x, y,999,canMultiply=True,special_interaction=True, change_rate=90, canDissipate=True)

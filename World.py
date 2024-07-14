@@ -1,5 +1,5 @@
 from typing import List
-from Particles import WATER_INTERACTION, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION
+from Particles import  CONSUMABLE_BY_FIRE, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
 from Grid import Grid
 from random import choice
 import Directions
@@ -30,6 +30,18 @@ class World:
                 if(particle.NAME != "Void"):
                         self.Particles.remove(particle)
                         self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
+        def replace_particle(self, particle : Particle, name : str):
+                
+                x = particle.x
+                y = particle.y
+                replace_index = 0;
+                for t in range(len(ParticleTypes)):
+                        if ParticleTypes[t].NAME == name:
+                                replace_index = t
+                if(particle.NAME != "Void"):
+                        self.Particles.remove(particle)
+                        self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
+                        self.add_particle(x,y,ParticleTypes[replace_index])
                         
         def get_particle(self, x : int, y : int) -> Particle:
                 return self._GRID.space[x][y]
@@ -59,9 +71,11 @@ class World:
                                 else:
                                         self.particle_try_move(particle)
 
-                        elif particle.canMultiply:
+                        if particle.canMultiply:
                                 self.multiply_particle(particle)
-                        
+                        if(particle.canDissipate):
+                                self.dissipate_particle(particle)
+                                pass
                         
                         # unmoving particle
                         else:
@@ -76,6 +90,12 @@ class World:
                                neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
         
+        def get_specific_neighbors(self,x,y) -> Particle:
+                if(x < self._GRID.rows and x >= 0 #check x is in the space
+                        and y < self._GRID.cols and y >= 0 ): #check if y is in the space ): 
+                               return self._GRID.space[x][y]
+                return None;
+                pass
         
         def replace_particles(self,particle1 : Particle, particle2 : Particle, name1 : str, name2 : str, name3 : str, interactions):
                 temp_index1 = -1
@@ -127,6 +147,18 @@ class World:
                                                 self.replace_with_moss(n)
                                         else:
                                                 n.change_rate -= 1
+                        case "Fire":
+                                neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_FIRE)
+                                for n in neighbors:
+                                        if not n.change_rate >0:
+                                                
+                                                rand = choice([1,2,3,4,5])
+                                                
+                                                if(rand == 1):
+                                                        self.replace_with_fire(n)
+                                                else: n.change_rate = 5
+                                        else:
+                                                n.change_rate -= 1
                         case _:
                                 pass
         def get_all_neighbors(self,particle : Particle, interaction_array) -> List[Particle]:
@@ -150,6 +182,38 @@ class World:
                 self.Particles.append(self._GRID.space[particle.x][particle.y])
                 
                 pass
+        def replace_with_fire(self, particle : Particle):
+                temp_pointer = particle
+                fire_index = -1
+                smoke_index = -1
+                for t in range(len(ParticleTypes)):
+                        if ParticleTypes[t].NAME == "Fire":
+                                fire_index = t
+                        if ParticleTypes[t].NAME == "Smoke":
+                                smoke_index = t
+                                
+                self._GRID.space[particle.x][particle.y] = ParticleTypes[fire_index](particle.x,particle.y)
+                self._GRID.space[particle.x][particle.y].last_update = self.current_interation
+                self.Particles.remove(temp_pointer)
+                self.Particles.append(self._GRID.space[particle.x][particle.y])
+                
+                neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
+                if (neighbor != None):
+                        for t in range(len(ParticleTypes)):
+                                if ParticleTypes[t].NAME == "Smoke":
+                                        replace_index = t
+                        self.add_particle(neighbor.x,neighbor.y,ParticleTypes[replace_index])
+                        
+                pass
+        def dissipate_particle(self, particle : Particle):
+                if(particle.change_rate <=0):
+                        rand = choice([1,2,3,4,5])
+                        
+                        if(rand ==1):
+                                self.replace_particle(particle,"Ash")
+                else:
+                        particle.change_rate -=1
+                        
         def particle_try_move(self,particle : Particle):
                 neighbors = self.get_void_neighbors(particle)
                 
