@@ -150,10 +150,10 @@ class World:
                                                 print("HERE??")
                                                 n.change_rate -= 1
                         case "Fire":
-                                rand = random.random()
+                                rand = random.randint(0,100)
                                 neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
                                 smoke_index = -1
-                                if (neighbor != None and neighbor.NAME == "Void" and rand < .02):
+                                if (neighbor != None and neighbor.NAME == "Void" and rand < 2):
                                         for t in range(len(ParticleTypes)):
                                                 if ParticleTypes[t].NAME == "Smoke":
                                                         smoke_index = t
