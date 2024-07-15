@@ -36,8 +36,8 @@ class Particle:
         self.generatesLeftover = generatesLeftover;
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 CONSUMABLE_BY_FIRE= ["Moss","Wood"]
-LAVA_INTERACTION = {"Water" : "Obsidian", "Wood": "Void", "Moss" : "Void"}
-WATER_INTERACTION = {"Lava" : "Stone", "Fire": "Void"}
+LAVA_INTERACTION = {"Water" : "Obsidian", "Wood": "Lava", "Moss" : "Lava"}
+WATER_INTERACTION = {"Lava" : "Stone", "Fire": "Void",}
 PARTICLE_GENERATIONS = {"Fire" : ["Smoke",2]}
 PARTICLE_LEFTOVERS = {"Fire" : ["Ash",100], "Steam" : ["Water", 30]}
 ParticleTypes: List[Type[Particle]] = []
