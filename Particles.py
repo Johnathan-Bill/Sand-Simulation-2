@@ -35,9 +35,11 @@ class Particle:
         self.canGenerateParticle = canGenerateParticle;
         self.generatesLeftover = generatesLeftover;
 CONSUMABLE_BY_MOSS = {"Stone":False,"Wood":False}
+CONSUMABLE_BY_ICE = {"Water":False}
 CONSUMABLE_BY_FIRE= {"Moss" : False,"Wood" :False, "Oil": True}
 LAVA_INTERACTION = {"Water" : "Obsidian", "Wood": "Lava", "Moss" : "Lava"}
 WATER_INTERACTION = {"Lava" : "Stone", "Fire": "Void",}
+ICE_INTERACTION = {"Lava" : "Water", "Fire" : "Water", "Water" : "Ice"}
 PARTICLE_GENERATIONS = {"Fire" : ["Smoke",2]}
 PARTICLE_LEFTOVERS = {"Fire" : ["Ash",100], "Steam" : ["Water", 30]}
 ParticleTypes: List[Type[Particle]] = []
@@ -75,6 +77,11 @@ class Wood(Particle):
     NAME = "Wood"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((161, 102, 47), self.NAME, x, y,999, change_rate=30)
+@add_to_particle_list
+class Ice(Particle):
+    NAME = "Ice"
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__((63,208,212), self.NAME, x, y,999, change_rate=30, special_interaction=True)
         
 @add_to_particle_list
 class Obsidian(Particle):
@@ -88,7 +95,7 @@ class Water(Particle):
     def __init__(self, x: int, y: int) -> None:
         super().__init__((28,163,236), self.NAME, x, y,5,True,
                          (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
-                         special_interaction=True)
+                         special_interaction=True, change_rate= 30)
 @add_to_particle_list
 class Lava(Particle):
     NAME = "Lava"

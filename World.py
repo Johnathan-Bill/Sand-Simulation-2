@@ -1,5 +1,5 @@
 from typing import List
-from Particles import  CONSUMABLE_BY_FIRE, PARTICLE_GENERATIONS, PARTICLE_LEFTOVERS, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
+from Particles import  CONSUMABLE_BY_FIRE, CONSUMABLE_BY_ICE, ICE_INTERACTION, PARTICLE_GENERATIONS, PARTICLE_LEFTOVERS, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
 from Grid import Grid
 from random import choice
 from multipledispatch import dispatch
@@ -118,7 +118,7 @@ class World:
         @dispatch(Particle,dict)
         def get_specific_neighbors(self, particle : Particle, interactions : dict):
                 neighbors = []
-                for direction in particle.DIRECTIONS:
+                for direction in Directions.GLOBAL_DIRECTIONS.values():
                         if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
                            and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
                            and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interactions.keys() ): 
@@ -182,6 +182,17 @@ class World:
                                         return
                                 rand = choice(neighbors)
                                 self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Steam" , WATER_INTERACTION)
+                                
+                        case "Ice":
+                                
+                                neighbors = self.get_specific_neighbors(particle,ICE_INTERACTION)
+                                if len(neighbors) < 1:
+                                        return
+                                rand = choice(neighbors)
+                                if(rand.NAME not in CONSUMABLE_BY_ICE):
+                                        self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Void" , ICE_INTERACTION)
+                                else:
+                                        self.multiply_particle(particle)
                                 pass
                 
                 pass
@@ -206,6 +217,13 @@ class World:
                                                 if(random.randint(1,5) == 1):
                                                         self.replace_with_fire(n)
                                                 else: n.change_rate = 5
+                                        else:
+                                                n.change_rate -= 1
+                        case "Ice":
+                                neighbors = self.get_all_neighbors(particle,list(CONSUMABLE_BY_ICE.keys()))
+                                for n in neighbors:
+                                        if not n.change_rate >0:
+                                                self.replace_particle(n,"Ice")
                                         else:
                                                 n.change_rate -= 1
 
