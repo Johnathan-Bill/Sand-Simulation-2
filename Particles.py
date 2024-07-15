@@ -36,10 +36,10 @@ class Particle:
         self.generatesLeftover = generatesLeftover;
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 CONSUMABLE_BY_FIRE= ["Moss","Wood"]
-LAVA_INTERACTION = {"Water" : "Obsidian"}
+LAVA_INTERACTION = {"Water" : "Obsidian", "Wood": "Void", "Moss" : "Void"}
 WATER_INTERACTION = {"Lava" : "Stone", "Fire": "Void"}
 PARTICLE_GENERATIONS = {"Fire" : ["Smoke",2]}
-PARTICLE_LEFTOVERS = {"Fire" : ["Ash",100]}
+PARTICLE_LEFTOVERS = {"Fire" : ["Ash",100], "Steam" : ["Water", 30]}
 ParticleTypes: List[Type[Particle]] = []
 def add_to_particle_list(particle : Type[Particle]) -> Type[Particle]:
     ParticleTypes.append(particle)
@@ -107,18 +107,20 @@ class Smoke(Particle):
     NAME = "Smoke"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((115, 130, 118), self.NAME, x, y,2, canFall= False,canRise = True, 
-                         dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
+                         dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),canDissipate=True,change_rate=240)
 @add_to_particle_list
 class Steam(Particle):
     NAME = "Steam"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((163, 221, 248), self.NAME, x, y,3, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
+        super().__init__((163, 221, 248), self.NAME, x, y,3, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),
+                         canDissipate=True, change_rate=180, generatesLeftover=True)
               
 @add_to_particle_list
 class Gas(Particle):
     NAME = "Gas"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((131, 143, 51), self.NAME, x, y,4, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]))
+        super().__init__((131, 143, 51), self.NAME, x, y,4, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),
+                         canDissipate=True, change_rate=120)
 
 @add_to_particle_list
 class Moss(Particle):
