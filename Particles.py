@@ -1,3 +1,4 @@
+import random
 from typing import Tuple,Type,List
 from Directions import GLOBAL_DIRECTIONS
 class Particle:
@@ -13,12 +14,13 @@ class Particle:
     canDissipate : bool
     canGenerateParticle : bool
     generatesLeftover : bool
+    canMoveDiagnoal : bool
     DIRECTIONS: List[List[int]]
     change_rate : int
     special_interaction : bool
     def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], 
                  canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False, 
-                 canDissipate : bool = False, canGenerateParticle : bool = False, generatesLeftover : bool = False)  -> None:
+                 canDissipate : bool = False, canGenerateParticle : bool = False, generatesLeftover : bool = False, canMoveDiaganoal : bool = False)   -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -34,6 +36,7 @@ class Particle:
         self.canDissipate = canDissipate
         self.canGenerateParticle = canGenerateParticle;
         self.generatesLeftover = generatesLeftover;
+        self.canMoveDiagnoal = canMoveDiaganoal
 CONSUMABLE_BY_MOSS = {"Stone":False,"Wood":False}
 CONSUMABLE_BY_ICE = {"Water":False}
 CONSUMABLE_BY_FIRE= {"Moss" : False,"Wood" :False, "Oil": True}
@@ -139,3 +142,12 @@ class Fire(Particle):
     NAME = "Fire"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((170, 66, 3), self.NAME, x, y,999,canMultiply=True,special_interaction=True, change_rate=90, canDissipate=True, canGenerateParticle=True, generatesLeftover= False)
+        
+@add_to_particle_list
+class Laser(Particle):
+    NAME = "Laser"
+    def __init__(self, x: int, y: int) -> None:
+        dir=(random.choice(("Up_Left","Up_Right","Down_Left","Down_Right")))
+        
+        super().__init__((252, 40, 171), self.NAME, x, y,999,canMultiply=True,special_interaction=True, generatesLeftover= False,
+                        dir = (GLOBAL_DIRECTIONS[dir],) ,canMoveDiaganoal= True)
