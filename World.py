@@ -1,5 +1,5 @@
 from typing import List
-from Particles import  CONSUMABLE_BY_FIRE, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
+from Particles import  CONSUMABLE_BY_FIRE, PARTICLE_GENERATIONS, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
 from Grid import Grid
 from random import choice
 import random
@@ -77,6 +77,9 @@ class World:
                         if(particle.canDissipate):
                                 self.dissipate_particle(particle)
                                 pass
+                        if(particle.canGenerateParticle):
+                                self.generateParticle(particle)
+                                pass
                         
                         # unmoving particle
                         else:
@@ -120,7 +123,18 @@ class World:
                 
                 self.Particles.append(self._GRID.space[particle1.x][particle1.y])
                 self.Particles.append(self._GRID.space[particle2.x][particle2.y])
-               
+        def generateParticle(self,particle: Particle):
+                        rand = random.randint(0,100)
+                        neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
+                        Generated_index = -1
+                        if (neighbor != None and neighbor.NAME == "Void" and rand < PARTICLE_GENERATIONS[particle.NAME][1]):
+                                for t in range(len(ParticleTypes)):
+                                        if ParticleTypes[t].NAME == PARTICLE_GENERATIONS[particle.NAME][0]:
+                                                Generated_index = t
+                                self.add_particle(neighbor.x,neighbor.y,ParticleTypes[Generated_index])
+                                
+                        pass
+                   
         def particle_interaction(self,particle : Particle):
                 neighbors = []
                 match particle.NAME:
@@ -150,14 +164,6 @@ class World:
                                                 print("HERE??")
                                                 n.change_rate -= 1
                         case "Fire":
-                                rand = random.randint(0,100)
-                                neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
-                                smoke_index = -1
-                                if (neighbor != None and neighbor.NAME == "Void" and rand < 2):
-                                        for t in range(len(ParticleTypes)):
-                                                if ParticleTypes[t].NAME == "Smoke":
-                                                        smoke_index = t
-                                        self.add_particle(neighbor.x,neighbor.y,ParticleTypes[smoke_index])
                                 neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_FIRE)
                                 for n in neighbors:
                                         if not n.change_rate >0:

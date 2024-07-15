@@ -11,11 +11,13 @@ class Particle:
     canRise : bool
     canMultiply : bool
     canDissipate : bool
+    canGenerateParticle : bool
     DIRECTIONS: List[List[int]]
     change_rate : int
     special_interaction : bool
     def __init__(self, color: Tuple, name : str, x : int, y : int, density : int = -1, canFall : bool = False, dir : List[List[int]] = [], 
-                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False, canDissipate : bool = False)  -> None:
+                 canRise: bool = False, canMultiply : bool = False, change_rate : int = -1, special_interaction : bool = False, 
+                 canDissipate : bool = False, canGenerateParticle : bool = False)  -> None:
         self.COLOR = color
         self.NAME = name
         self.x = x
@@ -29,10 +31,12 @@ class Particle:
         self.change_rate = change_rate
         self.special_interaction= special_interaction
         self.canDissipate = canDissipate
+        self.canGenerateParticle = canGenerateParticle;
 CONSUMABLE_BY_MOSS = ["Stone","Wood"]
 CONSUMABLE_BY_FIRE= ["Moss","Wood"]
 LAVA_INTERACTION = {"Water" : "Obsidian"}
 WATER_INTERACTION = {"Lava" : "Stone"}
+PARTICLE_GENERATIONS = {"Fire" : ["Smoke",2]}
 ParticleTypes: List[Type[Particle]] = []
 def add_to_particle_list(particle : Type[Particle]) -> Type[Particle]:
     ParticleTypes.append(particle)
@@ -122,4 +126,4 @@ class Moss(Particle):
 class Fire(Particle):
     NAME = "Fire"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((170, 66, 3), self.NAME, x, y,999,canMultiply=True,special_interaction=True, change_rate=90, canDissipate=True)
+        super().__init__((170, 66, 3), self.NAME, x, y,999,canMultiply=True,special_interaction=True, change_rate=90, canDissipate=True, canGenerateParticle=True)
