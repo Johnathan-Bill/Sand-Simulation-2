@@ -9,7 +9,6 @@ I always found physics in video games interesting especially in games like <a hr
 
 
 ## Future Additions
-- Steam, Smoke, Gas dissipation
 - Options screen for pixel size and world size
 - ability to hide controls from the right hand corner
 ## Current Issues
@@ -17,6 +16,11 @@ I always found physics in video games interesting especially in games like <a hr
 - Optimization Issues
     - The (without altering settings) simulation handles upto  14400 (non-void particles) (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
 ## Recent Changes
+- Steam, Smoke, Gas dissipation
+- Oil is instantly consumed by fire and doesnot generate ash
+- Steam can dissipate into water
+- Water extinguishes fire
+- lava destroys wood and moss
 - Added Fire
 - Fire Dissipation
 - Fire creates smoke
