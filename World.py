@@ -1,7 +1,8 @@
 from typing import List
-from Particles import  CONSUMABLE_BY_FIRE, PARTICLE_GENERATIONS, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
+from Particles import  CONSUMABLE_BY_FIRE, PARTICLE_GENERATIONS, PARTICLE_LEFTOVERS, ParticleTypes, Particle, CONSUMABLE_BY_MOSS,LAVA_INTERACTION, WATER_INTERACTION
 from Grid import Grid
 from random import choice
+from multipledispatch import dispatch
 import random
 import Directions
 class World:
@@ -24,6 +25,8 @@ class World:
                 self._GRID.space[x][y] = new_particle
                 self.Particles.append(new_particle)
         
+        
+        @dispatch(int,int)
         # deletes particle at x and y
         def delete_particle(self, x : int, y : int):
                 
@@ -31,11 +34,21 @@ class World:
                 if(particle.NAME != "Void"):
                         self.Particles.remove(particle)
                         self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
+        
+        @dispatch(Particle) #deletes specific particle                
+        def delete_particle(self, particle : Particle):
+                if(particle.NAME != "Void"):
+                        self.Particles.remove(particle)
+                        self._GRID.space[particle.x][particle.y] = ParticleTypes[0](particle.x,particle.y)
+        
+        #replaces specified particles
+        @dispatch(Particle, str)
         def replace_particle(self, particle : Particle, name : str):
-                
+                #sets temp x and y variables
                 x = particle.x
                 y = particle.y
                 replace_index = 0;
+                #finds what the particle type it should become
                 for t in range(len(ParticleTypes)):
                         if ParticleTypes[t].NAME == name:
                                 replace_index = t
@@ -43,7 +56,25 @@ class World:
                         self.Particles.remove(particle)
                         self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
                         self.add_particle(x,y,ParticleTypes[replace_index])
-                        
+        
+        def replace_with_leftover(self, particle : Particle, name : str):
+                #sets temp x and y variables
+                x = particle.x
+                y = particle.y
+                replace_index = 0;
+                #finds what the particle type it should become
+                for t in range(len(ParticleTypes)):
+                        if ParticleTypes[t].NAME == name:
+                                replace_index = t
+                                
+                #if the particle is not void remove it and set it to void then add the particle
+                if(particle.NAME != "Void"):
+                        self.Particles.remove(particle)
+                        self._GRID.space[x][y] = ParticleTypes[0](particle.x,particle.y)
+                        if(random.randint(0,100) <= PARTICLE_LEFTOVERS[particle.NAME][1]): 
+                                self.add_particle(x,y,ParticleTypes[replace_index])
+         
+         #gets particle at x and y               
         def get_particle(self, x : int, y : int) -> Particle:
                 return self._GRID.space[x][y]
                    
@@ -84,7 +115,7 @@ class World:
                         # unmoving particle
                         else:
                                 continue
-        
+        @dispatch(Particle,dict)
         def get_specific_neighbors(self, particle : Particle, interactions : dict):
                 neighbors = []
                 for direction in particle.DIRECTIONS:
@@ -93,14 +124,13 @@ class World:
                            and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interactions.keys() ): 
                                neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
-        
+        @dispatch(int,int)
         def get_specific_neighbors(self,x,y) -> Particle:
                 if(x < self._GRID.rows and x >= 0 #check x is in the space
                         and y < self._GRID.cols and y >= 0 ): #check if y is in the space ): 
                                return self._GRID.space[x][y]
                 return None;
-                pass
-        
+        @dispatch(Particle, Particle, str, str, str, dict)
         def replace_particles(self,particle1 : Particle, particle2 : Particle, name1 : str, name2 : str, name3 : str, interactions):
                 temp_index1 = -1
                 temp_index2 = -1
@@ -123,6 +153,8 @@ class World:
                 
                 self.Particles.append(self._GRID.space[particle1.x][particle1.y])
                 self.Particles.append(self._GRID.space[particle2.x][particle2.y])
+                
+                
         def generateParticle(self,particle: Particle):
                         rand = random.randint(0,100)
                         neighbor = self.get_specific_neighbors(particle.x, particle.y-1)
@@ -159,9 +191,8 @@ class World:
                                 neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_MOSS)
                                 for n in neighbors:
                                         if not n.change_rate >0:
-                                                self.replace_with_moss(n)
+                                                self.replace_particle(n,"Moss")
                                         else:
-                                                print("HERE??")
                                                 n.change_rate -= 1
                         case "Fire":
                                 neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_FIRE)
@@ -186,19 +217,7 @@ class World:
                            and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interaction_array): # check if it can be consumed
                              neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
-        def replace_with_moss(self, particle : Particle):
-                temp_pointer = particle
-                moss_index = -1
-                for t in range(len(ParticleTypes)):
-                        if ParticleTypes[t].NAME == "Moss":
-                                moss_index = t
-                                
-                self._GRID.space[particle.x][particle.y] = ParticleTypes[moss_index](particle.x,particle.y)
-                self._GRID.space[particle.x][particle.y].last_update = self.current_interation
-                self.Particles.remove(temp_pointer)
-                self.Particles.append(self._GRID.space[particle.x][particle.y])
-                
-                pass
+        
         def replace_with_fire(self, particle : Particle):
                 temp_pointer = particle
                 fire_index = -1
@@ -210,6 +229,7 @@ class World:
                                 smoke_index = t
                                 
                 self._GRID.space[particle.x][particle.y] = ParticleTypes[fire_index](particle.x,particle.y)
+                self._GRID.space[particle.x][particle.y].generatesLeftover = True
                 self._GRID.space[particle.x][particle.y].last_update = self.current_interation
                 self.Particles.remove(temp_pointer)
                 self.Particles.append(self._GRID.space[particle.x][particle.y])
@@ -219,12 +239,17 @@ class World:
                         self.add_particle(neighbor.x,neighbor.y,ParticleTypes[smoke_index])
                         
                 pass
+        
+        
         def dissipate_particle(self, particle : Particle):
                 if(particle.change_rate <=0):
                         rand = choice([1,2,3,4,5])
                         
                         if(rand ==1):
-                                self.replace_particle(particle,"Ash")
+                                if(particle.generatesLeftover):
+                                        self.replace_with_leftover(particle,PARTICLE_LEFTOVERS[particle.NAME][0])
+                                else:
+                                        self.delete_particle(particle)
                 else:
                         particle.change_rate -=1
                         
