@@ -188,20 +188,22 @@ class World:
         def multiply_particle(self,particle : Particle):
                 match particle.NAME:
                         case "Moss":
-                                neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_MOSS)
+                                neighbors = self.get_all_neighbors(particle,list(CONSUMABLE_BY_MOSS.keys()))
                                 for n in neighbors:
                                         if not n.change_rate >0:
                                                 self.replace_particle(n,"Moss")
                                         else:
                                                 n.change_rate -= 1
                         case "Fire":
-                                neighbors = self.get_all_neighbors(particle,CONSUMABLE_BY_FIRE)
+                                neighbors = self.get_all_neighbors(particle,list(CONSUMABLE_BY_FIRE.keys()))
                                 for n in neighbors:
-                                        if not n.change_rate >0:
+                                        
+                                        if(CONSUMABLE_BY_FIRE[n.NAME]):
+                                                self.replace_with_fire(n)
+                                        elif not n.change_rate >0:
                                                 
-                                                rand = choice([1,2,3,4,5])
                                                 
-                                                if(rand == 1):
+                                                if(random.randint(1,5) == 1):
                                                         self.replace_with_fire(n)
                                                 else: n.change_rate = 5
                                         else:
@@ -229,7 +231,7 @@ class World:
                                 smoke_index = t
                                 
                 self._GRID.space[particle.x][particle.y] = ParticleTypes[fire_index](particle.x,particle.y)
-                self._GRID.space[particle.x][particle.y].generatesLeftover = True
+                self._GRID.space[particle.x][particle.y].generatesLeftover = not CONSUMABLE_BY_FIRE[particle.NAME]
                 self._GRID.space[particle.x][particle.y].last_update = self.current_interation
                 self.Particles.remove(temp_pointer)
                 self.Particles.append(self._GRID.space[particle.x][particle.y])

@@ -34,8 +34,8 @@ class Particle:
         self.canDissipate = canDissipate
         self.canGenerateParticle = canGenerateParticle;
         self.generatesLeftover = generatesLeftover;
-CONSUMABLE_BY_MOSS = ["Stone","Wood"]
-CONSUMABLE_BY_FIRE= ["Moss","Wood"]
+CONSUMABLE_BY_MOSS = {"Stone":False,"Wood":False}
+CONSUMABLE_BY_FIRE= {"Moss" : False,"Wood" :False, "Oil": True}
 LAVA_INTERACTION = {"Water" : "Obsidian", "Wood": "Lava", "Moss" : "Lava"}
 WATER_INTERACTION = {"Lava" : "Stone", "Fire": "Void",}
 PARTICLE_GENERATIONS = {"Fire" : ["Smoke",2]}
