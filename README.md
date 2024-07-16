@@ -2,7 +2,7 @@
 
 **WORK IN PROGRESS**
 ## Who am I
-I am Johnathan Bill, a recent from West Virginia University Institute of Technology with a Bachelor's of Science in Information Systems and a minor in Computer Science. I am aspiring Software Engineer and Web Developer and love to challenge myself with new and interesting projects. 
+I am Johnathan Bill, a Software Engineer from West Virginia and aspiring web / full stack developer. I enjoy creating interesting projects that not only challenge myself but also showcase my skillset with the my field of work.
 
 ## Why Sand Simulation
 I always found physics in video games interesting especially in games like <a href="https://dan-ball.jp/en/javagame/dust/" target="_blank">Dust</a> where objects interact with each other in such a way that it become life like while being able to remain rather simple. I wanted to challenge myself and create a sand simulation with a variety of systems using new technology (pygame) with little to no guidance.
