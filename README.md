@@ -16,6 +16,10 @@ I always found physics in video games interesting especially in games like <a hr
 - Optimization Issues
     - The (without altering settings) simulation handles upto  14400 (non-void particles) (determined by screen size and pixel size in game.py) particles. This is a lot of particles, which can cause slow downs once the screen is full of them.
 ## Recent Changes
+- Added a laser (bounces around like the DVD logo)
+- Added Ice
+- Ice turns to water when touching lava and Fire
+- Ice Freezes water after a delay
 - Steam, Smoke, Gas dissipation
 - Oil is instantly consumed by fire and doesnot generate ash
 - Steam can dissipate into water
