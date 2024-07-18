@@ -123,7 +123,8 @@ class World:
                 for direction in Directions.GLOBAL_DIRECTIONS.values():
                         if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
                            and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
-                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME in interactions.keys() ): 
+                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME != "Void"
+                           and interactions.get(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME) is not None): 
                                neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
                 return neighbors
         @dispatch(int,int)
@@ -197,8 +198,6 @@ class World:
                                 rand = choice(neighbors)
                                 if(rand.NAME not in CONSUMABLE_BY_ICE): # checks if the block is consumable if it isnt it needs to multiply
                                         self.replace_particles(particle, rand, particle.NAME, rand.NAME, "Void" , ICE_INTERACTION)
-                                else:
-                                        self.multiply_particle(particle)
                                 pass
                 
                 pass
@@ -280,17 +279,16 @@ class World:
                         particle.change_rate -=1
                         
         def particle_try_move(self,particle : Particle): #handles none ONLY horizontal movement
-                neighbors = self.get_void_neighbors(particle) # gets all the neighbors that are void
                 
+                neighbors = self.get_neighbors(particle) # gets all neighbors and splits them into a list of two different lists
                 
-                if(len(neighbors) >= 1): #choses random direction and moves to it
-                        randNeighbor = choice(neighbors)
+                if(len(neighbors[0]) >= 1): #choses random direction and moves to it
+                        randNeighbor = choice(neighbors[0])
                         self.swap_particles(particle,randNeighbor) #moves particle in new direction 
                         return
-                
-                neighbors = self.get_neighbors(particle) #gets all neighbors of particle if there was no void neighbors
-                if(len(neighbors) >= 1):
-                        randNeighbor = choice(neighbors)
+
+                if(len(neighbors[1]) >= 1):
+                        randNeighbor = choice(neighbors[1])
                         self.swap_particles(particle,randNeighbor)
                         return
                 
@@ -317,15 +315,28 @@ class World:
                         self.particle_try_move(particle)
                 pass        
                                
-        def get_neighbors(self, particle : Particle):
-                neighbors = []
+        # def get_neighbors(self, particle : Particle):
+        #         neighbors = []
+        #         for direction in particle.DIRECTIONS:
+        #                 if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
+        #                    and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
+        #                    and ((self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density) or particle == -1 )#check if the density is lower
+        #                    and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME !="Void"): 
+        #                        neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
+        #         return neighbors
+        
+        def get_neighbors(self, particle : Particle) -> List[List[Particle]]:
+                void_neighbors = []
+                particle_neighbors = []
                 for direction in particle.DIRECTIONS:
                         if(direction[0] + particle.x < self._GRID.rows and direction[0] + particle.x >= 0 #check x is in the space
-                           and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0 #check if y is in the space
-                           and ((self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density) or particle == -1 )#check if the density is lower
-                           and self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME !="Void"): 
-                               neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]]) 
-                return neighbors
+                           and direction[1] + particle.y < self._GRID.cols and direction[1] + particle.y >= 0):#check if y is in the space : #check if the density is lower
+                               if(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].NAME == "Void"):
+                                        void_neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]])
+                               elif((self._GRID.space[particle.x + direction[0]][particle.y + direction[1]].density < particle.density) or (particle == -1 )):
+                                        particle_neighbors.append(self._GRID.space[particle.x + direction[0]][particle.y + direction[1]])
+                               
+                return [void_neighbors,particle_neighbors]
         
         def get_void_neighbors(self, particle : Particle) -> List[Particle]:
                 neighbors = []

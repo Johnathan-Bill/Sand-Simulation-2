@@ -84,7 +84,7 @@ class Wood(Particle):
 class Ice(Particle):
     NAME = "Ice"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((63,208,212), self.NAME, x, y,999, change_rate=30, special_interaction=True)
+        super().__init__((63,208,212), self.NAME, x, y,999, change_rate=30, special_interaction=True, canMultiply=True)
         
 @add_to_particle_list
 class Obsidian(Particle):
@@ -97,39 +97,39 @@ class Water(Particle):
     NAME = "Water"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((28,163,236), self.NAME, x, y,5,True,
-                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"]),
                          special_interaction=True, change_rate= 30)
 @add_to_particle_list
 class Lava(Particle):
     NAME = "Lava"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((255,37,0), self.NAME, x, y,4,True,
-                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]),
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"]),
                          special_interaction=True)
 @add_to_particle_list
 class Oil(Particle):
     NAME = "Oil"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((219,207,92), self.NAME, x, y,3,True,
-                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"],GLOBAL_DIRECTIONS["Down_Left"],GLOBAL_DIRECTIONS["Down_Right"]))
+                         (GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Down"]))
 @add_to_particle_list
 class Smoke(Particle):
     NAME = "Smoke"
     def __init__(self, x: int, y: int) -> None:
         super().__init__((115, 130, 118), self.NAME, x, y,2, canFall= False,canRise = True, 
-                         dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),canDissipate=True,change_rate=240)
+                         dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"]),canDissipate=True,change_rate=240)
 @add_to_particle_list
 class Steam(Particle):
     NAME = "Steam"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((163, 221, 248), self.NAME, x, y,3, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),
+        super().__init__((163, 221, 248), self.NAME, x, y,3, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"]),
                          canDissipate=True, change_rate=180, generatesLeftover=True)
               
 @add_to_particle_list
 class Gas(Particle):
     NAME = "Gas"
     def __init__(self, x: int, y: int) -> None:
-        super().__init__((131, 143, 51), self.NAME, x, y,4, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"],GLOBAL_DIRECTIONS["Up_Left"],GLOBAL_DIRECTIONS["Up_Right"]),
+        super().__init__((131, 143, 51), self.NAME, x, y,4, canFall= False,canRise = True, dir=(GLOBAL_DIRECTIONS["Left"],GLOBAL_DIRECTIONS["Right"],GLOBAL_DIRECTIONS["Up"]),
                          canDissipate=True, change_rate=120)
 
 @add_to_particle_list
