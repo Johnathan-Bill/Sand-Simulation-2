@@ -21,7 +21,7 @@ I always found physics in video games interesting especially in games like <a hr
 - Ice turns to water when touching lava and Fire
 - Ice Freezes water after a delay
 - Steam, Smoke, Gas dissipation
-- Oil is instantly consumed by fire and doesnot generate ash
+- Oil is instantly consumed by fire and does not generate ash
 - Steam can dissipate into water
 - Water extinguishes fire
 - lava destroys wood and moss
